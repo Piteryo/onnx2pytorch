@@ -14,7 +14,10 @@ class Pad(Operator):
             pads = self.padding
         elif pads is None:
             raise TypeError("forward() missing 1 required positional argument: 'pads'")
-        out = F.pad(input, list(pads), mode=self.mode, value=value)
+        if input.dim() == 4 and pads.shape[0] == 8:
+            input = input.squeeze(0)
+            pads = [pads[3].item(), pads[7].item()]
+        out = F.pad(input, pads, mode=self.mode, value=value)
         return out
 
     def extra_repr(self) -> str:

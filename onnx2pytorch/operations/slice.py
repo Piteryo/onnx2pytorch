@@ -70,9 +70,9 @@ class Slice(nn.Module):
         flip_dims = []
         for i, axis in enumerate(axes):
             raw_slice = slice(
-                starts[i].to(dtype=torch.long, device=data.device),
-                ends[i].to(dtype=torch.long, device=data.device),
-                steps[i].to(dtype=torch.long, device=data.device),
+                int(starts[i]),
+                int(ends[i]),
+                int(steps[i]),
             )
             if steps[i] < 0:
                 selection[axis] = _to_positive_step(raw_slice, data.shape[axis])

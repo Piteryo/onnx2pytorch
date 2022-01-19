@@ -5,9 +5,8 @@ from torch import nn
 class Div(nn.Module):
     def forward(self, input, other):
         res_type = torch.result_type(input, other)
+        if not res_type.is_floating_point:
+            return torch.div(input, other, rounding_mode='floor')
         true_quotient = torch.true_divide(input, other)
-        if res_type.is_floating_point:
-            res = true_quotient
-        else:
-            res = torch.floor(true_quotient).to(res_type)
+        res = true_quotient
         return res
